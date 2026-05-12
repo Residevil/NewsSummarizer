@@ -1,0 +1,25 @@
+{
+  "primary": "local",
+  "secondary": "groq",
+  "tertiary": "openai",
+  "fallback": "rss",
+  "openai": {
+    "model": "gpt-4o-mini"
+  },
+  "deepseek": {
+    "base_url": "https://api.deepseek.com",
+    "model": "deepseek-chat"
+  },
+  "groq": {
+    "base_url": "https://api.groq.com/openai/v1",
+    "model": "llama-3.3-70b-versatile"
+  },
+  "local": {
+    "model": "phi3",
+    "url": "http://localhost:11434/api/generate"
+  },
+  "rss": {
+    "mode": "truncate"
+  }
+}
+  

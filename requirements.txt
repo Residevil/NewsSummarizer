@@ -3,3 +3,4 @@ uvicorn
 feedparser
 python-dotenv
 requests
+pyinstaller

@@ -24,13 +24,17 @@ def fetch_news():
         feed = feedparser.parse(url)
 
         for entry in feed.entries:
+            published = parse_date(entry)
+            if isinstance(published, datetime):
+                published = published.isoformat()
+
             articles.append({
                 "title": entry.get("title", ""),
                 "summary": entry.get("summary", ""),
                 "content": entry.get("content", [{}])[0].get("value", None),
                 "link": entry.get("link", ""),
                 "source": source,
-                "published": parse_date(entry)
+                "published": published
             })
 
     return articles
