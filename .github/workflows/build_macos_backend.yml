@@ -6,20 +6,33 @@ on:
 jobs:
   build-macos:
     runs-on: macos-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Install Python
         run: brew install python
 
-      - name: Install dependencies
-        run: pip3 install -r requirements.txt
+      - name: Create virtual environment
+        run: python3 -m venv venv
 
-      - name: Build binary
-        run: pyinstaller run_backend.py --onefile --name run_backend_macos
+      - name: Activate venv and install dependencies
+        run: |
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
+      - name: Build macOS backend binary
+        run: |
+          source venv/bin/activate
+          pyinstaller run_backend.py --onefile --name run_backend_macos
+
+      - name: Upload macOS backend artifact
+        uses: actions/upload-artifact@v4
         with:
           name: run_backend_macos
           path: dist/run_backend_macos
+          compression-level: 6
+          retention-days: 7
