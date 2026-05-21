@@ -91,3 +91,64 @@ def save_cache(articles):
         TIMESTAMP_FILE.write_text(datetime.now().isoformat())
     except Exception as e:
         logger.error(f"Error writing timestamp file {TIMESTAMP_FILE}: {e}")
+
+        # INSERT_YOUR_CODE
+
+def clean_cache():
+    """
+    Deletes all files in the cache backup directory and resets the main cache and timestamp files.
+    """
+    try:
+        # Remove all backup files
+        if BACKUP_DIR.exists():
+            for bfile in BACKUP_DIR.iterdir():
+                if bfile.is_file():
+                    try:
+                        bfile.unlink()
+                        logger.info(f"Backup file {bfile} deleted during cache clean.")
+                    except Exception as e:
+                        logger.error(f"Failed to delete backup {bfile}: {e}")
+    except Exception as e:
+        logger.error(f"Error cleaning backup directory: {e}")
+
+    # Remove main cache file
+    try:
+        if CACHE_FILE.exists():
+            CACHE_FILE.unlink()
+            logger.info(f"Main cache file {CACHE_FILE} deleted during cache clean.")
+    except Exception as e:
+        logger.error(f"Error deleting main cache file: {e}")
+
+    # Remove timestamp file
+    try:
+        if TIMESTAMP_FILE.exists():
+            TIMESTAMP_FILE.unlink()
+            logger.info(f"Timestamp file {TIMESTAMP_FILE} deleted during cache clean.")
+    except Exception as e:
+        logger.error(f"Error deleting timestamp file: {e}")
+
+
+def regular_clean_cache(days_old=7):
+    """
+    Removes backup files older than `days_old` days from the backup directory.
+    """
+    try:
+        if not BACKUP_DIR.exists():
+            logger.info("Backup directory does not exist. No cleanup necessary.")
+            return
+
+        now = datetime.now()
+        for bfile in BACKUP_DIR.iterdir():
+            if bfile.is_file():
+                try:
+                    mtime = datetime.fromtimestamp(bfile.stat().st_mtime)
+                    if now - mtime > timedelta(days=days_old):
+                        try:
+                            bfile.unlink()
+                            logger.info(f"Old backup {bfile} deleted by regular_clean_cache.")
+                        except Exception as delete_ex:
+                            logger.error(f"Error deleting old backup {bfile}: {delete_ex}")
+                except Exception as stat_ex:
+                    logger.error(f"Error stat-ing backup file {bfile}: {stat_ex}")
+    except Exception as e:
+        logger.error(f"Error during regular backup cleanup: {e}")

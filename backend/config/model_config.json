@@ -1,8 +1,8 @@
 {
-  "primary": "local",
+  "primary": "rss",
   "secondary": "groq",
   "tertiary": "openai",
-  "fallback": "rss",
+  "fallback": "local",
   "openai": {
     "model": "gpt-4o-mini"
   },

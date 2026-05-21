@@ -6,7 +6,7 @@
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:1420",
-    "beforeDevCommand": "pnpm dev",
+    "beforeDevCommand": "",
     "beforeBuildCommand": "pnpm build"
   },
   "app": {
@@ -35,6 +35,9 @@
     ],
     "android": {
       "debugApplicationIdSuffix": ".debug"
-    }
+    },
+    "resources": [
+      "binaries/*"
+    ]
   }
 }

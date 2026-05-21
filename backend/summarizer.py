@@ -19,13 +19,24 @@ logger = logging.getLogger(__name__)
 
 
 def resource_path(relative_path):
+    """
+    Get absolute path for resources, supporting PyInstaller and dynamic config paths.
+    If the environment variable MODEL_CONFIG_PATH is set, use it directly.
+    """
+    env_path = os.getenv("MODEL_CONFIG_PATH")
+    if env_path:
+        if os.path.isdir(env_path):
+            return os.path.join(env_path, relative_path)
+        return env_path
+
     # When running as a PyInstaller bundle
     if hasattr(sys, "_MEIPASS"):
         return os.path.join(sys._MEIPASS, relative_path)
     # When running normally
     return os.path.join(os.path.dirname(__file__), relative_path)
 
-CONFIG_PATH = resource_path("backend/config/model_config.json")
+# By default, use 'config/model_config.json' relative to source for flexibility.
+CONFIG_PATH = resource_path("config/model_config.json")
 
 
 def load_config():
